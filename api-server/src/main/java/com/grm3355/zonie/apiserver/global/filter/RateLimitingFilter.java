@@ -93,16 +93,22 @@ public class RateLimitingFilter extends OncePerRequestFilter {
 		String rateLimitKey;
 		int currentMaxRequests;
 
-		boolean isAuthTarget = isUriMatch(requestUri, AUTH_ENDPOINTS);
-		boolean isReadTarget = isUriMatch(requestUri, READ_ENDPOINTS);
+		String authPattern = findMatchingPattern(requestUri, AUTH_ENDPOINTS);
+		String readPattern = findMatchingPattern(requestUri, READ_ENDPOINTS);
 
-		if (!isAuthTarget && !isReadTarget) {
+		boolean isAuthTarget = authPattern != null;
+		boolean isReadTarget = readPattern != null;
+
+		// 요청의 실제 URI 대신 -> 매칭된 Pattern 사용
+		String matchedPattern = isAuthTarget ? authPattern : (isReadTarget ? readPattern : null);
+
+		if (matchedPattern == null) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 
 		// 2. 임계치 및 Key 설정
-		boolean useAuthPolicy = isAuthTarget && isHighCostRequest(method, requestUri, requestUri);
+		boolean useAuthPolicy = isAuthTarget && isHighCostRequest(method, requestUri);
 
 		if (useAuthPolicy) {
 			// ====================================================================
@@ -115,14 +121,14 @@ public class RateLimitingFilter extends OncePerRequestFilter {
 				try {
 					// 토큰이 유효하면 User ID 기준으로 제한 (DB 접근 x)
 					String userId = jwtTokenProvider.getUserIdFromToken(jwt);
-					rateLimitKey = userId + ":" + requestUri;
+					rateLimitKey = userId + ":" + matchedPattern;
 				} catch (JwtException | IllegalArgumentException e) {
 					// 토큰 만료/유효하지 않으면 IP 기준으로 대체 제한
-					rateLimitKey = getClientIp(request) + ":" + requestUri;
+					rateLimitKey = getClientIp(request) + ":" + matchedPattern;
 				}
 			} else {
 				// 토큰이 없으면 (예: 최초 토큰 발급 시도) IP 기준으로 제한
-				rateLimitKey = getClientIp(request) + ":" + requestUri;
+				rateLimitKey = getClientIp(request) + ":" + matchedPattern;
 			}
 		} else if (isReadTarget) {
 			// ====================================================================
@@ -130,7 +136,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
 			// ====================================================================
 			currentMaxRequests = MAX_REQUESTS_READ;
 			// Public API는 악성 크롤링 방어를 위해 IP 기준으로 제한
-			rateLimitKey = getClientIp(request) + ":" + requestUri;
+			rateLimitKey = getClientIp(request) + ":" + matchedPattern;
 		} else {
 			// Rate Limit 적용 x
 			filterChain.doFilter(request, response);
@@ -151,6 +157,19 @@ public class RateLimitingFilter extends OncePerRequestFilter {
 	 * AntPathMatcher: URI 패턴 매칭
 	 * @param requestUri 현재 요청 URI
 	 * @param patterns List<String>으로 정의된 패턴 목록
+	 * @return 매칭되는 패턴이 있으면 해당 패턴 문자열, 없으면 null
+	 */
+	private String findMatchingPattern(String requestUri, List<String> patterns) { 
+		return patterns.stream()
+			.filter(pattern -> pathMatcher.match(pattern, requestUri))
+			.findFirst()
+			.orElse(null);
+	}
+
+	/**
+	 * AntPathMatcher: URI 패턴 매칭
+	 * @param requestUri 현재 요청 URI
+	 * @param patterns List<String>으로 정의된 패턴 목록
 	 * @return 매칭되는 패턴이 하나라도 있으면 true
 	 */
 	private boolean isUriMatch(String requestUri, List<String> patterns) {
@@ -162,7 +181,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
 	 * - POST, PATCH, DELETE는 항상 High Cost로.
 	 * - 특정 GET 요청도 (Latency가 높으면) High Cost로.
 	 */
-	private boolean isHighCostRequest(String method, String requestUri, String normalizedUri) {
+	private boolean isHighCostRequest(String method, String requestUri) {
 		if (method.equals("POST") || method.equals("PATCH") || method.equals("DELETE")) {
 			return true;
 		}

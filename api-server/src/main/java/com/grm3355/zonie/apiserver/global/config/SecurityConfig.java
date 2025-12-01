@@ -47,6 +47,7 @@ public class SecurityConfig {
 		"/api/v1/festivals/*",           // 단건 조회 (ID)
 		"/api/v1/festivals/regions",    //지역목록
 		"/api/v1/festivals/count",
+		"/api/v1/festivals/*/chat-rooms", // GET 축제별 채팅방 목록
 		"/api/v1/search/**", //통합검색
 		"/static/**",    // 정적 이미지 경로
 		"/swagger-ui/**",     // Swagger UI
@@ -135,16 +136,13 @@ public class SecurityConfig {
 			// - requestMatchers(WHITE_LIST).permitAll(): WHITE_LIST에 정의된 URL은 인증 없이 접근 허용
 			// - anyRequest().authenticated(): 그 외 모든 요청은 인증된 사용자만 접근 허용
 			.authorizeHttpRequests(auth -> auth
-
-				// === POST 는 인증 필요 ===
-				.requestMatchers(HttpMethod.POST, "/api/v1/festivals/*/chat-rooms")
-				.authenticated()
-
-				.requestMatchers(WHITE_LIST).permitAll()
+				.requestMatchers(WHITE_LIST).permitAll()    // 모든 HTTP Method (GET, POST, PUT, DELETE 등)
 				.requestMatchers(HttpMethod.OPTIONS).permitAll()
 				.anyRequest().authenticated()
 			)
 
+			// RateLimitingFilter는 UsernamePasswordAuthenticationFilter 이전에 등록
+			// - 인증 필터보다 이전에 Rate Limit 검증: cpu/db 부하 전 요청 차단
 			// JWT 필터 등록:
 			// - UsernamePasswordAuthenticationFilter 이전에 JwtAuthenticationFilter를 추가하여
 			//   요청 처리 초기에 JWT 인증을 수행하도록 한다.
