@@ -10,4 +10,4 @@ COPY api-server/build/libs/api-server-*.jar app.jar
 EXPOSE 8080
 
 # 컨테이너 시작 시 실행할 명령어
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xms2g", "-Xmx2g", "-Xlog:gc*:stdout:time,level,tags", "-jar", "app.jar"]

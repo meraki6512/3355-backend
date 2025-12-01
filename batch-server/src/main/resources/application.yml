@@ -23,3 +23,12 @@ location:
 festival:
   batch:
     date: 7 # 오늘 ~ +7일치 데이터만 조회
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      show-details: never

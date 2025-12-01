@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
+@Setter
 public class User extends BaseTimeEntity {
 
 	@Id
@@ -74,9 +76,4 @@ public class User extends BaseTimeEntity {
 	public void updateEmail(String email) {
 		this.accountEmail = email;
 	}
-
-	//todo 휴대폰번호 컬럼 추가필요
-	//	public void updatePhoneNumber(String phoneNumber) {
-	//		this.phoneNumber = phoneNumber;
-	//	}
 }

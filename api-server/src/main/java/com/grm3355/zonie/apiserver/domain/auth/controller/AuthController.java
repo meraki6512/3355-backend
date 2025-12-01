@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grm3355.zonie.apiserver.domain.auth.dto.AccessTokenResponse;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.LoginRequest;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.LoginResponse;
+import com.grm3355.zonie.apiserver.domain.auth.dto.LoginRequest;
+import com.grm3355.zonie.apiserver.domain.auth.dto.LoginResponse;
 import com.grm3355.zonie.apiserver.domain.auth.service.AuthService;
 import com.grm3355.zonie.apiserver.domain.auth.service.RedisTokenService;
 import com.grm3355.zonie.apiserver.domain.auth.util.CookieProperties;

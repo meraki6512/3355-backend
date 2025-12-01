@@ -18,6 +18,7 @@ public class FestivalInfoService {
 	}
 
 	//축제테이블에 존재여부체크
+	@Transactional(readOnly = true)
 	public Festival getDataValid(long festivalId, int dayNum) {
 		return festivalRepository
 			.findByIsValidFestival(festivalId, dayNum)
@@ -38,6 +39,8 @@ public class FestivalInfoService {
 	 * @param maxRadius 최대 허용 반경 (km)
 	 * @return 반경 내에 있으면 true
 	 */
+	@Deprecated
+	@Transactional(readOnly = true)
 	public boolean isUserWithinFestivalRadius(long festivalId, double lat, double lon, double maxRadius) {
 		// PostGIS 쿼리(findDistanceToFestival)를 호출하여 거리를 km 단위로 가져옵니다.
 		double distanceKm = festivalRepository.findDistanceToFestival(festivalId, lon, lat)

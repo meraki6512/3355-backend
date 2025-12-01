@@ -17,9 +17,9 @@ import com.grm3355.zonie.apiserver.domain.auth.domain.OAuth2Clients;
 import com.grm3355.zonie.apiserver.domain.auth.domain.UserInfo;
 import com.grm3355.zonie.apiserver.domain.auth.dto.AuthResponse;
 import com.grm3355.zonie.apiserver.domain.auth.dto.LocationDto;
+import com.grm3355.zonie.apiserver.domain.auth.dto.LoginRequest;
+import com.grm3355.zonie.apiserver.domain.auth.dto.LoginResponse;
 import com.grm3355.zonie.apiserver.domain.auth.dto.UserTokenDto;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.LoginRequest;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.LoginResponse;
 import com.grm3355.zonie.apiserver.domain.auth.util.AESUtil;
 import com.grm3355.zonie.apiserver.domain.auth.util.HashUtil;
 import com.grm3355.zonie.apiserver.global.jwt.UserDetailsImpl;
@@ -110,13 +110,23 @@ public class AuthService {
 		double lat = locationDto.getLat();
 		double lon = locationDto.getLon();
 
-		//아이디저장
-		String password = passwordEncoder.encode(userId);
-		User user = User.builder()
-			.userId(userId)
-			.password(password)
-			.role(Role.USER).build();
-		userRepository.save(user);
+		try {
+			// 임시 테스트 이메일 생성 (userId 기반)
+			String testEmail = userId + "@test-guest.com";
+			String encryptedEmail = aesUtil.encrypt(testEmail); // 이메일 암호화
+
+			//아이디저장
+			String password = passwordEncoder.encode(userId);
+			User user = User.builder()
+				.userId(userId)
+				.password(password)
+				.accountEmail(encryptedEmail) // 암호화된 이메일 추가
+				.role(Role.USER).build();
+			userRepository.save(user);
+		} catch (Exception e) {
+			// 암호화 실패 시 예외 처리
+			throw new RuntimeException("Test user email encryption failed", e);
+		}
 
 		//사용자정보
 		UserTokenDto userTokenDto = UserTokenDto.builder()

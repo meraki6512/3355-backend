@@ -1,0 +1,207 @@
+{
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "SETUP: Master token created": {
+                    "name": "SETUP: Master token created",
+                    "path": "::SETUP: Master token created",
+                    "id": "7f3c2c1ada2568f195efc71fe206339a",
+                    "passes": 1,
+                    "fails": 0
+                },
+                "SETUP: Festival created": {
+                    "name": "SETUP: Festival created",
+                    "path": "::SETUP: Festival created",
+                    "id": "a89a6fa3d2ef5e83e30b82e77ddf23a4",
+                    "passes": 1,
+                    "fails": 0
+                },
+                "create chatroom: status is 201": {
+                    "name": "create chatroom: status is 201",
+                    "path": "::create chatroom: status is 201",
+                    "id": "01d1bd0d1d5e0a5ed3d70524554b96f1",
+                    "passes": 6,
+                    "fails": 0
+                },
+                "user profile: status is 200": {
+                    "id": "0167bb9bc750463b2548595c678a245d",
+                    "passes": 11,
+                    "fails": 0,
+                    "name": "user profile: status is 200",
+                    "path": "::user profile: status is 200"
+                },
+                "festival list: status is 200": {
+                    "path": "::festival list: status is 200",
+                    "id": "bd583a6e5a664b80f2f77c0fe0fdb193",
+                    "passes": 11,
+                    "fails": 0,
+                    "name": "festival list: status is 200"
+                },
+                "my chat-rooms list: status is 200": {
+                    "passes": 5,
+                    "fails": 0,
+                    "name": "my chat-rooms list: status is 200",
+                    "path": "::my chat-rooms list: status is 200",
+                    "id": "eac97598b4dc01e3bb495c95a9d5256c"
+                },
+                "total search: status is 200": {
+                    "fails": 0,
+                    "name": "total search: status is 200",
+                    "path": "::total search: status is 200",
+                    "id": "cac2fec353419a85e649939282ab9536",
+                    "passes": 5
+                }
+            }
+    },
+    "metrics": {
+        "http_req_duration_create_chatroom": {
+            "med": 39.378,
+            "max": 100.026,
+            "p(90)": 89.9175,
+            "p(95)": 94.97174999999999,
+            "avg": 55.91583333333333,
+            "min": 38.348
+        },
+        "data_sent": {
+            "count": 60631,
+            "rate": 504.4261982482898
+        },
+        "iterations": {
+            "count": 59918,
+            "rate": 498.4943172080458
+        },
+        "http_reqs": {
+            "count": 540,
+            "rate": 4.4925887261314585
+        },
+        "http_req_receiving": {
+            "p(95)": 0.28009999999999996,
+            "avg": 0.14055555555555554,
+            "min": 0.037,
+            "med": 0.1265,
+            "max": 0.831,
+            "p(90)": 0.20550000000000004
+        },
+        "checks": {
+            "passes": 40,
+            "fails": 0,
+            "value": 1
+        },
+        "iteration_duration": {
+            "avg": 1002.228389216936,
+            "min": 1000.009958,
+            "med": 1000.3739795,
+            "max": 82076.402708,
+            "p(90)": 1002.3453001,
+            "p(95)": 1002.89862315
+        },
+        "data_received": {
+            "count": 426326,
+            "rate": 3546.865520845778
+        },
+        "http_req_duration": {
+            "p(95)": 169.70235,
+            "avg": 151.66343703703697,
+            "min": 16.775,
+            "med": 159.637,
+            "max": 267.112,
+            "p(90)": 162.3084,
+            "thresholds": {
+                "p(95)<1500": false
+            }
+        },
+        "http_req_blocked": {
+            "p(95)": 0.002,
+            "avg": 0.13674999999999943,
+            "min": 0,
+            "med": 0.002,
+            "max": 72.908,
+            "p(90)": 0.002
+        },
+        "vus": {
+            "value": 500,
+            "min": 500,
+            "max": 500
+        },
+        "http_req_duration_user_profile": {
+            "avg": 20.31690909090909,
+            "min": 17.922,
+            "med": 18.777,
+            "max": 29.011,
+            "p(90)": 26.621,
+            "p(95)": 27.816
+        },
+        "http_req_connecting": {
+            "min": 0,
+            "med": 0,
+            "max": 14.391,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.02665
+        },
+        "http_req_tls_handshaking": {
+            "max": 22.169,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.0410537037037037,
+            "min": 0,
+            "med": 0
+        },
+        "http_req_duration_my_chat_rooms_list": {
+            "p(90)": 38.2866,
+            "p(95)": 38.3238,
+            "avg": 32.4356,
+            "min": 28.167,
+            "med": 28.974,
+            "max": 38.361
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 540,
+            "thresholds": {
+                "rate<0.05": false
+            },
+            "value": 0
+        },
+        "http_req_duration_festivals_list": {
+            "avg": 26.54909090909091,
+            "min": 16.775,
+            "med": 18.655,
+            "max": 58.325,
+            "p(90)": 48.217,
+            "p(95)": 53.270999999999994
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 151.66343703703697,
+            "min": 16.775,
+            "med": 159.637,
+            "max": 267.112,
+            "p(90)": 162.3084,
+            "p(95)": 169.70235
+        },
+        "http_req_waiting": {
+            "p(90)": 161.9514,
+            "p(95)": 169.23684999999998,
+            "avg": 151.23929259259248,
+            "min": 16.144,
+            "med": 159.2175,
+            "max": 266.444
+        },
+        "vus_max": {
+            "max": 500,
+            "value": 500,
+            "min": 500
+        },
+        "http_req_sending": {
+            "avg": 0.2835888888888886,
+            "min": 0.064,
+            "med": 0.29,
+            "max": 1.357,
+            "p(90)": 0.378,
+            "p(95)": 0.41405
+        }
+    }
+}

@@ -9,11 +9,15 @@ spring:
     group:
       "dev": "dev,local"
       "prod": "prod"
+  datasource:
+    hikari:
+      maximum-pool-size: 5  # 최대 커넥션 수
+      connection-timeout: 60000  # 커넥션을 얻기 위해 대기하는 시간: 60초
 management:
   endpoints:
     web:
       exposure:
-        include: health, info
+        include: health, info, prometheus
   endpoint:
     health:
       show-details: never
@@ -26,7 +30,7 @@ chat:
   pre-create-day: 7 #7일전부터 생성 가능
   pre-view-day: 7 #7일전부터 축제보기 가능
   nickname-start: 3355
-  
+
 location:
   token:
     ttl-minutes: 15

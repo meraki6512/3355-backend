@@ -1,4 +1,4 @@
-package com.grm3355.zonie.apiserver.domain.auth.infrasturucture;
+package com.grm3355.zonie.apiserver.domain.auth.infra;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.SoftAssertions.*;
@@ -18,9 +18,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grm3355.zonie.apiserver.domain.auth.domain.UserInfo;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.KakaoUserInfo;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.KakaoUserInfo.KakaoAccount;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.KakaoUserInfo.KakaoAccount.Profile;
+import com.grm3355.zonie.apiserver.domain.auth.dto.KakaoUserInfo;
+import com.grm3355.zonie.apiserver.domain.auth.dto.KakaoUserInfo.KakaoAccount;
+import com.grm3355.zonie.apiserver.domain.auth.dto.KakaoUserInfo.KakaoAccount.Profile;
 import com.grm3355.zonie.commonlib.global.enums.ProviderType;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)

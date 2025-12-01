@@ -20,8 +20,8 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.LoginRequest;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.LoginResponse;
+import com.grm3355.zonie.apiserver.domain.auth.dto.LoginRequest;
+import com.grm3355.zonie.apiserver.domain.auth.dto.LoginResponse;
 import com.grm3355.zonie.apiserver.domain.auth.service.AuthService;
 import com.grm3355.zonie.apiserver.domain.auth.service.RedisTokenService;
 import com.grm3355.zonie.apiserver.domain.auth.util.CookieProperties;

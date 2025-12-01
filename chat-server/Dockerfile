@@ -11,4 +11,5 @@ COPY chat-server/build/libs/chat-server-*.jar app.jar
 EXPOSE 8081
 
 # 컨테이너 시작 시 실행할 명령어
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# 챗 서버는 동시 연결 수가 많을 수록 메모리 사용량이 증가하기 때문에, 우선 4기가로 설정해 부하 대비함
+ENTRYPOINT ["java", "-Xms4g", "-Xmx4g", "-Xlog:gc*:stdout:time,level,tags", "-jar", "app.jar"]

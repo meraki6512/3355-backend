@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import com.grm3355.zonie.apiserver.domain.auth.domain.AuthProvider;
 import com.grm3355.zonie.apiserver.domain.auth.domain.OAuth2Client;
 import com.grm3355.zonie.apiserver.domain.auth.domain.OAuth2Clients;
-import com.grm3355.zonie.apiserver.domain.auth.infrasturucture.JwtAuthProvider;
+import com.grm3355.zonie.apiserver.domain.auth.infra.JwtAuthProvider;
 
 @Configuration
 public class AuthConfig {

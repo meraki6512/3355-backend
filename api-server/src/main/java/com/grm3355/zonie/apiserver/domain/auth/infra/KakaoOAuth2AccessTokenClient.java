@@ -1,4 +1,4 @@
-package com.grm3355.zonie.apiserver.domain.auth.infrasturucture;
+package com.grm3355.zonie.apiserver.domain.auth.infra;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.KakaoAccessTokenResponse;
+import com.grm3355.zonie.apiserver.domain.auth.dto.KakaoAccessTokenResponse;
 
 @Component
 public class KakaoOAuth2AccessTokenClient {

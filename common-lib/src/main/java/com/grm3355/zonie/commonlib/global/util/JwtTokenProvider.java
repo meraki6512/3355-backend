@@ -29,6 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtTokenProvider {
 
 	private static final String CLAIM_KEY_AUTH = "auth";
+	private static final String CLAIM_KEY_ROLE = "role";
+	private static final String CLAIM_KEY_PASSWORD = "password";
 
 	@Value("${jwt.secret}") // application.yml에서 JWT 서명에 사용될 비밀 키를 주입받는다.
 	private String secret;
@@ -65,7 +67,6 @@ public class JwtTokenProvider {
 	public String createAccessToken(String userId, Role role) {
 		return createToken(userId, role.name(), accessTokenExpirationTime);
 	}
-
 
 	/**
 	 * Access Token 재발급을 위한 Refresh Token을 생성한다.
@@ -108,11 +109,18 @@ public class JwtTokenProvider {
 			.verifyWith(key)
 			.build()
 			.parseSignedClaims(token)
-			.getPayload(	);
+			.getPayload();
 	}
 
 	public String getUserIdFromToken(String token) {
 		return extractClaims(token).getSubject();
 	}
 
+	public String getRoleFromToken(String token) {
+		return extractClaims(token).get(CLAIM_KEY_ROLE, String.class);
+	}
+
+	public String getPasswordFromToken(String token) {
+		return extractClaims(token).get(CLAIM_KEY_PASSWORD, String.class);
+	}
 }

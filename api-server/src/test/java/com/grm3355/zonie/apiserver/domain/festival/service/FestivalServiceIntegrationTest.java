@@ -26,7 +26,8 @@ import com.grm3355.zonie.commonlib.domain.festival.repository.FestivalRepository
 @SpringBootTest(
 	properties = {
 		"spring.data.mongodb.auto-configuration.enabled=false",
-		"spring.data.redis.repositories.enabled=false"
+		"spring.data.redis.repositories.enabled=false",
+		"spring.cache.type=none"
 	}
 )
 class FestivalServiceIntegrationTest extends BaseIntegrationTest {

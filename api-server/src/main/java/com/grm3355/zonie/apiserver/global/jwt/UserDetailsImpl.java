@@ -25,7 +25,6 @@ public class UserDetailsImpl implements UserDetails {
 	private final boolean isEnabled;
 	private final boolean isAccountNonLocked;
 
-
 	public UserDetailsImpl(String userId, String username, String password,
 		Collection<? extends GrantedAuthority> authorities,
 		boolean isEnabled, boolean isAccountNonLocked) {
@@ -51,6 +50,20 @@ public class UserDetailsImpl implements UserDetails {
 			authorities,
 			true, // 계정 활성 상태 (ACTIVE일 때만 true)
 			true // 계정 잠금 상태 (LOCKED가 아닐 때만 true)
+		);
+	}
+
+	// 토큰 Payload 정보로 UserDetails 객체를 생성하는 정적 팩토리 메서드
+	public static UserDetailsImpl buildFromToken(String userId, String roleName, String password) {
+		List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + roleName));
+
+		return new UserDetailsImpl(
+			userId,
+			userId, // username (userId 사용)
+			password,
+			authorities,
+			true, // isEnabled (토큰이 유효하면 활성으로 간주)
+			true  // isAccountNonLocked (토큰이 유효하면 잠금되지 않은 것으로 간주)
 		);
 	}
 

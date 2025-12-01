@@ -1,4 +1,4 @@
-package com.grm3355.zonie.apiserver.domain.auth.dto.auth;
+package com.grm3355.zonie.apiserver.domain.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

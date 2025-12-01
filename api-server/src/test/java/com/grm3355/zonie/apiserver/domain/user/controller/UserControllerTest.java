@@ -1,6 +1,7 @@
 package com.grm3355.zonie.apiserver.domain.user.controller;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.eq;
@@ -25,6 +26,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.grm3355.zonie.apiserver.domain.auth.dto.UserProfileResponse;
 import com.grm3355.zonie.apiserver.domain.auth.dto.UserQuitResponse;
@@ -32,6 +34,7 @@ import com.grm3355.zonie.apiserver.domain.auth.util.CookieProperties;
 import com.grm3355.zonie.apiserver.domain.user.service.UserService;
 import com.grm3355.zonie.apiserver.global.jwt.UserDetailsImpl;
 import com.grm3355.zonie.apiserver.global.service.RateLimitingService;
+import com.grm3355.zonie.commonlib.global.util.JwtTokenProvider;
 
 @WebMvcTest(UserController.class)
 @AutoConfigureMockMvc(addFilters = false) //시큐리티 제외
@@ -46,6 +49,12 @@ class UserControllerTest {
 
 	@MockitoBean
 	private RateLimitingService rateLimitingService;
+
+	@MockitoBean
+	private JwtTokenProvider jwtTokenProvider;
+
+	@MockitoBean
+	private ObjectMapper objectMapper;
 
 	@Test
 	@DisplayName("내 프로필조회 성공")

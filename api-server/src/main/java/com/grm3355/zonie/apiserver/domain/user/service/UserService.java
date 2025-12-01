@@ -1,5 +1,6 @@
 package com.grm3355.zonie.apiserver.domain.user.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,21 +14,17 @@ import com.grm3355.zonie.commonlib.domain.user.repository.UserRepository;
 import com.grm3355.zonie.commonlib.global.exception.BusinessException;
 import com.grm3355.zonie.commonlib.global.exception.ErrorCode;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserService {
 	private final UserRepository userRepository;
 	private final RedisTokenService redisTokenService;
 	private final AESUtil aesUtil;
-
-	public UserService(UserRepository userRepository, RedisTokenService redisTokenService, AESUtil aesUtil) {
-		this.userRepository = userRepository;
-		this.redisTokenService = redisTokenService;
-		this.aesUtil = aesUtil;
-	}
 
 	@Transactional
 	public void updateEmail(String userId, EmailUpdateRequest request) {
@@ -35,13 +32,20 @@ public class UserService {
 		user.updateEmail(request.email());
 	}
 
+	@Cacheable(value = "userProfile", key = "#userId")
 	public UserProfileResponse getUserProfile(String userId) throws Exception {
 		User user = userRepository.findByUserIdAndDeletedAtIsNull(userId)
 			.orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
+		String decryptedEmail = null;
+		if (user.getAccountEmail() != null) {
+			// 이 복호화 작업이 CPU를 많이 먹음: 캐싱
+			decryptedEmail = aesUtil.decrypt(user.getAccountEmail());
+		}
+
 		return new UserProfileResponse(
 			user.getUserId(),
-			aesUtil.decrypt(user.getAccountEmail()),
+			decryptedEmail,
 			user.getCreatedAt()
 		);
 	}
@@ -58,11 +62,4 @@ public class UserService {
 		redisTokenService.deleteAllTokensForUser(userId);
 		log.info("정상적으로 탈퇴처리되었습니다.");
 	}
-
-	//todo 휴대전화 컬럼 필요
-	//    @Transactional
-	//    public void updatePhoneNumber(String userId, PhoneNumberUpdateRequest request) {
-	//        User user = userRepository.getOrThrow(userId);
-	//        user.updatePhoneNumber(request.phoneNumber());
-	//    }
 }

@@ -21,6 +21,7 @@ tasks.named('test') {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     // 모듈별 의존성
     implementation project(':common-lib')
     implementation 'org.springframework.boot:spring-boot-starter-webflux'

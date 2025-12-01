@@ -129,8 +129,40 @@ services:
     networks:
       - zonie-net
 
+  # --- 7. Monitoring (Prometheus) ---
+  prometheus:
+    image: prom/prometheus:v2.47.2
+    container_name: zonie_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../config/prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command: --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - zonie-net
+
+  # --- 8. Visualization (Grafana) ---
+  grafana:
+    image: grafana/grafana:10.1.5
+    container_name: zonie_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - zonie-net
+
 # --- 데이터 보존을 위한 볼륨 정의 ---
 volumes:
   postgres_data:
   redis_data:
   mongo_data:
+  prometheus_data:
+  grafana_data:

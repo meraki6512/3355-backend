@@ -135,9 +135,6 @@ public class SecurityConfig {
 			// - requestMatchers(WHITE_LIST).permitAll(): WHITE_LIST에 정의된 URL은 인증 없이 접근 허용
 			// - anyRequest().authenticated(): 그 외 모든 요청은 인증된 사용자만 접근 허용
 			.authorizeHttpRequests(auth -> auth
-				// === GET 은 permitAll ===
-				.requestMatchers(HttpMethod.GET, "/api/v1/festivals/*/chat-rooms")
-				.permitAll()
 
 				// === POST 는 인증 필요 ===
 				.requestMatchers(HttpMethod.POST, "/api/v1/festivals/*/chat-rooms")

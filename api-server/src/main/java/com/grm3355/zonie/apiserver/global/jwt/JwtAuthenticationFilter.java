@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
@@ -48,18 +47,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		if (jwt != null) {
 			try {
+				// 1. 토큰 유효성 및 서명 검증
 				jwtTokenProvider.validateToken(jwt);
+				// 토큰 Payload -> 모든 정보 추출
 				String userId = jwtTokenProvider.getUserIdFromToken(jwt);
+				String role = jwtTokenProvider.getRoleFromToken(jwt);
+				String password = jwtTokenProvider.getPasswordFromToken(jwt);
 
 				// DB에서 최신 사용자 정보를 로드하여 토큰 정보의 유효성(예: 계정 잠금, 권한 변경 등)을 확인한다.
 				// 이는 토큰이 탈취되거나 사용자 상태가 변경되었을 때 발생할 수 있는 보안 문제를 방지한다.
-				UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+				// UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+
+				// 추출된 정보만으로 UserDetails 객체 직접 생성 (DB 접근 0)
+				UserDetailsImpl userDetails = UserDetailsImpl.buildFromToken(userId, role, password);
+
 				UsernamePasswordAuthenticationToken authentication =
 					new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 				SecurityContextHolder.getContext().setAuthentication(authentication);
+
 			} catch (ExpiredJwtException e) {
 				log.warn("만료된 JWT 토큰: {}", e.getMessage());
 			} catch (JwtException | IllegalArgumentException e) {

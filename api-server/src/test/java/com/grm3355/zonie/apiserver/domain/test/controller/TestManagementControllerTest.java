@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grm3355.zonie.apiserver.domain.auth.dto.AuthResponse;
 import com.grm3355.zonie.apiserver.domain.auth.dto.LocationDto;
-import com.grm3355.zonie.apiserver.domain.auth.dto.auth.LoginResponse;
+import com.grm3355.zonie.apiserver.domain.auth.dto.LoginResponse;
 import com.grm3355.zonie.apiserver.domain.auth.service.AuthService;
 import com.grm3355.zonie.apiserver.domain.festival.dto.FestivalCreateRequest;
 import com.grm3355.zonie.apiserver.domain.festival.dto.FestivalResponse;

@@ -22,7 +22,6 @@ import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.grm3355.zonie.apiserver.domain.chatroom.service.ChatRoomApiService;
 import com.grm3355.zonie.apiserver.domain.festival.dto.FestivalCreateRequest;
 import com.grm3355.zonie.apiserver.domain.festival.dto.FestivalDetailResponse;
 import com.grm3355.zonie.apiserver.domain.festival.dto.FestivalResponse;
@@ -38,25 +37,19 @@ import com.grm3355.zonie.commonlib.global.enums.Region;
 import com.grm3355.zonie.commonlib.global.exception.BusinessException;
 import com.grm3355.zonie.commonlib.global.exception.ErrorCode;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class FestivalService {
 
 	private final FestivalDetailImageRepository detailImageRepository;
 	private final FestivalRepository festivalRepository;
-	private final ChatRoomApiService chatRoomApiService;
 	@Value("${chat.pre-view-day}")
 	private int preview_days; //시작하기전 몇일전부터 보여주기
-
-	public FestivalService(FestivalDetailImageRepository detailImageRepository, FestivalRepository festivalRepository,
-		ChatRoomApiService chatRoomApiService) {
-		this.detailImageRepository = detailImageRepository;
-		this.festivalRepository = festivalRepository;
-		this.chatRoomApiService = chatRoomApiService;
-	}
 
 	/**
 	 * 축제목록
@@ -65,7 +58,7 @@ public class FestivalService {
 	 * 2: 날짜 정렬 - 진행중 기본: 시작일 빠른 순, 예정 기본: 시작일 가까운 순(임박순)
 	 * 3: 제목 정렬 (동일 날짜면 제목 가나다순)
 	 */
-	@Transactional
+	@Transactional(readOnly = true)
 	public Page<FestivalResponse> getFestivalList(FestivalSearchRequest req) {
 
 		//축제 위치기반 체크
@@ -224,13 +217,13 @@ public class FestivalService {
 		if (region == null) {
 			throw new BusinessException(ErrorCode.BAD_REQUEST,
 				"지역 코드를 정확하게 입력하세요. 지역코드 정보는 다음과 같습니다.\n SEOUL(\"서울\"),\n"
-				+ "\tGYEONGGI(\"경기/인천\"),\n"
-				+ "\tCHUNGCHEONG(\"충청/대전/세종\"),\n"
-				+ "\tGANGWON(\"강원\"),\n"
-				+ "\tGYEONGBUK(\"경북/대구/울산\"),\n"
-				+ "\tGYEONGNAM(\"경남/부산\"),\n"
-				+ "\tJEOLLA(\"전라/광주\"),\n"
-				+ "\tJEJU(\"제주\")}");
+					+ "\tGYEONGGI(\"경기/인천\"),\n"
+					+ "\tCHUNGCHEONG(\"충청/대전/세종\"),\n"
+					+ "\tGANGWON(\"강원\"),\n"
+					+ "\tGYEONGBUK(\"경북/대구/울산\"),\n"
+					+ "\tGYEONGNAM(\"경남/부산\"),\n"
+					+ "\tJEOLLA(\"전라/광주\"),\n"
+					+ "\tJEJU(\"제주\")}");
 		}
 
 		// 3. Repository에 count용 메서드 호출: getFestivalList와 동일하게 preview_days를 적용하여 노출될 축제만 카운트
